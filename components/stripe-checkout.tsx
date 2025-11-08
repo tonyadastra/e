@@ -6,7 +6,7 @@ import { loadStripe } from "@stripe/stripe-js"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_test_51SQYPnDdygdmoX0hd54vyC9izVR3bcPt7g3VjgR24uc6TToho59J9saFpHMZhgFJi4yR9mj20NcyfL6eV4SxBEQD00PMtaiAEk")
 
 interface StripeCheckoutProps {
   items: Array<{ productId: string; quantity: number }>
