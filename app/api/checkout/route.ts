@@ -3,7 +3,7 @@ import Stripe from "stripe"
 import { PRODUCTS } from "@/lib/products"
 
 export async function POST(request: NextRequest) {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY! || "sk_test_51SQYPnDdygdmoX0hrRHc1oZ9SmnqkxW8m8CdKsVn6UdtMZyp7kOw1H2pxDuOVGW2iKbsrqKja6ze041VVMBHhR2G00IYvZFkVK")
 
     try {
         const { items } = await request.json()
