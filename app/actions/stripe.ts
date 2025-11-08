@@ -1,9 +1,12 @@
 "use server"
 
-import { stripe } from "@/lib/stripe"
+
+import Stripe from "stripe"
 import { PRODUCTS } from "@/lib/products"
 
 export async function createCheckoutSession(items: Array<{ productId: string; quantity: number }>) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+
   try {
     // Validate all products exist and build line items
     const lineItems = items.map((item) => {
@@ -44,6 +47,7 @@ export async function createCheckoutSession(items: Array<{ productId: string; qu
 }
 
 export async function getSessionStatus(sessionId: string) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId)
     return {
