@@ -3,6 +3,7 @@
 import { Shirt, Watch, Headphones, Gamepad2, Camera, Coffee, Package, Star } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { useCollections } from "@/hooks/use-shopify"
+import type { ShopifyCollection } from "@/lib/shopify"
 
 const defaultIcons = [Shirt, Watch, Headphones, Gamepad2, Camera, Coffee, Package, Star]
 
@@ -69,19 +70,21 @@ export function Categories() {
 
             if (isRealCollection) {
               IconComponent = defaultIcons[index % defaultIcons.length]
+              const shopifyCategory = category as ShopifyCollection
               categoryData = {
-                id: category.id,
-                title: category.title,
-                handle: category.handle,
-                image: category.image?.url,
-                imageAlt: category.image?.altText,
+                id: shopifyCategory.id,
+                title: shopifyCategory.title,
+                handle: shopifyCategory.handle,
+                image: shopifyCategory.image?.url,
+                imageAlt: shopifyCategory.image?.altText,
               }
             } else {
-              IconComponent = category.icon
+              const placeholderCategory = category as typeof placeholderCategories[0]
+              IconComponent = placeholderCategory.icon
               categoryData = {
-                id: category.id,
-                title: category.title,
-                handle: category.handle,
+                id: placeholderCategory.id,
+                title: placeholderCategory.title,
+                handle: placeholderCategory.handle,
                 image: null,
                 imageAlt: null,
               }
@@ -95,9 +98,9 @@ export function Categories() {
                 onClick={
                   !isRealCollection
                     ? (e) => {
-                        e.preventDefault()
-                        alert("This is a demo. Connect your Shopify store to browse real collections!")
-                      }
+                      e.preventDefault()
+                      alert("This is a demo. Connect your Shopify store to browse real collections!")
+                    }
                     : undefined
                 }
               >
