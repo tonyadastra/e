@@ -3,7 +3,6 @@
 import { useCallback, useState } from "react"
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js"
 import { loadStripe } from "@stripe/stripe-js"
-import { createCheckoutSession } from "@/app/actions/stripe"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
 
@@ -18,14 +17,22 @@ export function StripeCheckout({ items, onClose }: StripeCheckoutProps) {
   const [error, setError] = useState<string | null>(null)
 
   const fetchClientSecret = useCallback(async () => {
-    const result = await createCheckoutSession(items)
+    const response = await fetch("/api/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ items }),
+    })
 
-    if (result.error) {
-      setError(result.error)
-      throw new Error(result.error)
+    const result = await response.json()
+
+    if (!response.ok || result.error) {
+      setError(result.error || "Failed to create checkout session")
+      throw new Error(result.error || "Failed to create checkout session")
     }
 
-    return result.clientSecret!
+    return result.clientSecret
   }, [items])
 
   if (error) {
